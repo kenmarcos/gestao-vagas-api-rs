@@ -11,7 +11,13 @@ public class SecurityConfig {
   @Bean // indica que o método dentro da classe de configuração está sendo usado para
         // definir algum objeto já gerenciado pelo Spring
   SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    http.csrf(csrf -> csrf.disable());
+    http.csrf(csrf -> csrf.disable())
+        .authorizeHttpRequests(auth -> {
+          auth.requestMatchers("/candidates/").permitAll()
+              .requestMatchers("/companies/").permitAll();
+          auth.anyRequest().authenticated();
+        });
+
     return http.build();
   }
 }
