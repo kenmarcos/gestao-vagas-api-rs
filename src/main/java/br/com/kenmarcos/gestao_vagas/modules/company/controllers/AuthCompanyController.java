@@ -21,6 +21,8 @@ public class AuthCompanyController {
 
   @PostMapping("/companies")
   public ResponseEntity<Object> create(@RequestBody AuthCompanyDTO authCompanyDTO) {
+    System.out.println(authCompanyDTO.getUsername());
+    System.out.println(authCompanyDTO.getPassword());
     try {
       var result = authCompanyService.execute(authCompanyDTO);
 
