@@ -1,10 +1,10 @@
-package br.com.kenmarcos.gestao_vagas.modules.company.controllers;
+package br.com.kenmarcos.gestao_vagas.modules.candidate.controllers;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.kenmarcos.gestao_vagas.modules.company.dto.AuthCompanyDTO;
-import br.com.kenmarcos.gestao_vagas.modules.company.services.AuthCompanyService;
+import br.com.kenmarcos.gestao_vagas.modules.candidate.dto.AuthCandidateRequestDTO;
+import br.com.kenmarcos.gestao_vagas.modules.candidate.services.AuthCandidateService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,17 +14,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/auth")
-public class AuthCompanyController {
+public class AuthCandidateController {
 
   @Autowired
-  private AuthCompanyService authCompanyService;
+  private AuthCandidateService authCandidateService;
 
-  @PostMapping("/companies")
-  public ResponseEntity<Object> authenticate(@RequestBody AuthCompanyDTO authCompanyDTO) {
+  @PostMapping("/candidates")
+  public ResponseEntity<Object> authenticate(@RequestBody AuthCandidateRequestDTO authCandidateRequestDTO) {
     try {
-      var result = authCompanyService.execute(authCompanyDTO);
+      var token = authCandidateService.execute(authCandidateRequestDTO);
 
-      return ResponseEntity.ok().body(result);
+      return ResponseEntity.ok().body(token);
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
     }

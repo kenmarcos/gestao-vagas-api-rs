@@ -45,13 +45,19 @@ public class AuthCandidateService {
     }
 
     Algorithm algorithm = Algorithm.HMAC256(secretKey);
+
+    var expiresIn = Instant.now().plus(Duration.ofHours(2));
+
     var token = JWT.create().withIssuer("kenmarcos")
-        .withExpiresAt(Instant.now().plus(Duration.ofHours(2)))
+        .withExpiresAt(expiresIn)
         .withSubject(candidate.getId().toString())
         .withClaim("roles", Arrays.asList("candidate"))
         .sign(algorithm);
 
-    var authCandidateResponse = AuthCandidateResponseDTO.builder().access_token(token).build();
+    var authCandidateResponse = AuthCandidateResponseDTO.builder()
+        .access_token(token)
+        .expires_in(expiresIn.toEpochMilli())
+        .build();
 
     return authCandidateResponse;
   }
