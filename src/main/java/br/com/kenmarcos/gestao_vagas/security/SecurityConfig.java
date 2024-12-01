@@ -15,6 +15,9 @@ public class SecurityConfig {
   @Autowired
   private SecurityFilter securityFilter;
 
+  @Autowired
+  private SecurityCandidateFilter securityCandidateFilter;
+
   @Bean // indica que o método dentro da classe de configuração está sendo usado para
         // definir algum objeto já gerenciado pelo Spring
   SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -22,11 +25,12 @@ public class SecurityConfig {
         .authorizeHttpRequests(auth -> {
           auth.requestMatchers("/candidates/").permitAll()
               .requestMatchers("/companies/").permitAll()
-              .requestMatchers("/auth/companies").permitAll()
-              .requestMatchers("/auth/candidates").permitAll();
+              .requestMatchers("/companies/auth").permitAll()
+              .requestMatchers("/candidates/auth").permitAll();
 
           auth.anyRequest().authenticated();
         })
+        .addFilterBefore(securityCandidateFilter, BasicAuthenticationFilter.class)
         .addFilterBefore(securityFilter, BasicAuthenticationFilter.class);
 
     return http.build();
